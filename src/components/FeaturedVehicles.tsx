@@ -1,9 +1,23 @@
+
+import { connection } from "next/server";
 import Reveal from "./Reveal";
 import SectionHeading from "./SectionHeading";
 import VehicleCard from "./VehicleCard";
-import { VEHICLES } from "@/lib/data";
+import { prisma } from "@/lib/prisma";
 
-export default function FeaturedVehicles() {
+export default async function FeaturedVehicles() {
+  // Load vehicle listings at request time, not during the build.
+  await connection();
+
+  const vehicles = await prisma.vehicleListing.findMany({
+    where: {
+      isPublished: true,
+    },
+    orderBy: {
+      sortOrder: "asc",
+    },
+  });
+
   return (
     <section id="vehicles" className="bg-ink py-20 lg:py-28">
       <div className="mx-auto max-w-7xl px-5 sm:px-8">
@@ -19,8 +33,12 @@ export default function FeaturedVehicles() {
         </p>
 
         <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {VEHICLES.map((vehicle, i) => (
-            <Reveal key={vehicle.id} delay={(i % 3) * 0.1} className="h-full">
+          {vehicles.map((vehicle, i) => (
+            <Reveal
+              key={vehicle.id}
+              delay={(i % 3) * 0.1}
+              className="h-full"
+            >
               <VehicleCard vehicle={vehicle} />
             </Reveal>
           ))}

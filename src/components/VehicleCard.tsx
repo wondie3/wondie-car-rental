@@ -1,7 +1,23 @@
-import { Cog, Fuel, Luggage, Users } from "lucide-react";
-import type { Vehicle } from "@/lib/data";
 
-export default function VehicleCard({ vehicle }: { vehicle: Vehicle }) {
+import { Cog, Fuel, Luggage, Users } from "lucide-react";
+
+type VehicleCardData = {
+  id: string;
+  name: string;
+  category: string;
+  seats: number;
+  transmission: string;
+  fuel: string;
+  bags: number;
+  imageUrl: string;
+  examplePriceEtb: number;
+};
+
+export default function VehicleCard({
+  vehicle,
+}: {
+  vehicle: VehicleCardData;
+}) {
   const specs = [
     { icon: Users, label: `${vehicle.seats} seats` },
     { icon: Cog, label: vehicle.transmission },
@@ -16,7 +32,7 @@ export default function VehicleCard({ vehicle }: { vehicle: Vehicle }) {
           role="img"
           aria-label={`${vehicle.name} representative photo`}
           className="absolute inset-0 bg-cover bg-center transition duration-700 group-hover:scale-105"
-          style={{ backgroundImage: `url("${vehicle.image}")` }}
+          style={{ backgroundImage: `url("${vehicle.imageUrl}")` }}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/10 to-black/25" />
         <span className="absolute left-4 top-4 rounded-full border border-gold/40 bg-ink/70 px-3 py-1 text-[0.65rem] font-semibold uppercase tracking-[0.18em] text-gold backdrop-blur-sm">
@@ -30,7 +46,11 @@ export default function VehicleCard({ vehicle }: { vehicle: Vehicle }) {
         <ul className="mt-4 grid grid-cols-2 gap-x-4 gap-y-3 text-sm text-ivory/70">
           {specs.map(({ icon: Icon, label }) => (
             <li key={label} className="flex items-center gap-2">
-              <Icon size={16} className="shrink-0 text-gold" aria-hidden="true" />
+              <Icon
+                size={16}
+                className="shrink-0 text-gold"
+                aria-hidden="true"
+              />
               {label}
             </li>
           ))}
@@ -42,8 +62,8 @@ export default function VehicleCard({ vehicle }: { vehicle: Vehicle }) {
               Example price
             </p>
             <p className="mt-1">
-              <span className="font-display text-3xl font-bold text-ivory">
-                ${vehicle.examplePrice}
+              <span className="font-display text-2xl font-bold text-ivory sm:text-3xl">
+                ETB {vehicle.examplePriceEtb.toLocaleString("en-US")}
               </span>
               <span className="text-sm text-ivory/50"> / day</span>
             </p>

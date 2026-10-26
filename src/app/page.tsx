@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import FeaturedVehicles from "@/components/FeaturedVehicles";
@@ -14,7 +15,15 @@ export default function Home() {
       <Navbar />
       <main>
         <Hero />
-        <FeaturedVehicles />
+        <Suspense
+  fallback={
+    <section className="bg-ink py-20 text-center text-ivory">
+      Loading featured vehicles...
+    </section>
+  }
+>
+  <FeaturedVehicles />
+</Suspense>
         <ScrollCar />
         <WhyChoose />
         <HowItWorks />

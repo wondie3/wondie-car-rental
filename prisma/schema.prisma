@@ -8,6 +8,26 @@ datasource db {
   provider = "postgresql"
 }
 
+model VehicleListing {
+  id              String   @id @default(cuid())
+  slug            String   @unique
+  name            String
+  category        String
+  seats           Int
+  transmission    String
+  fuel            String
+  bags            Int
+  imageUrl        String
+  examplePriceEtb Int
+  isExample       Boolean  @default(true)
+  isPublished     Boolean  @default(true)
+  sortOrder       Int      @default(0)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([isPublished, sortOrder])
+}
+
 model Location {
   id        String   @id @default(cuid())
   name      String
@@ -19,10 +39,10 @@ model Location {
 }
 
 model Car {
-  id            String   @id @default(cuid())
-  slug          String   @unique
+  id            String    @id @default(cuid())
+  slug          String    @unique
   name          String
-  plateNumber   String   @unique
+  plateNumber   String    @unique
   description   String
   seats         Int
   transmission  String
@@ -32,9 +52,9 @@ model Car {
   imageUrl      String
   status        CarStatus @default(AVAILABLE)
   locationId    String
-  location      Location @relation(fields: [locationId], references: [id])
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  location      Location  @relation(fields: [locationId], references: [id])
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
 
   @@index([status])
   @@index([locationId])
